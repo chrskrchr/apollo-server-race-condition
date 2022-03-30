@@ -5,14 +5,10 @@ const {
 const resolvers = require("./resolvers");
 
 const typeDefs = gql`
-  type Object {
-    errorSoon: String!
-    nestedObjectSoon: Object!
-    justAString: String!
-  }
-
   type Query {
-    nonNullObject: Object!
+    errorSoon: String!
+    nestedObjectSoon: Query!
+    justAString: String!
   }
 `;
 

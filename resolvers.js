@@ -4,11 +4,6 @@ async function delay(ms) {
 
 const resolvers = {
     Query: {
-        nonNullObject() {
-            return {};
-        },
-    },
-    Object: {
         async errorSoon() {
             console.log("errorSoon: top");
             await delay(20);
