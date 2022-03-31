@@ -6,12 +6,7 @@ https://github.com/apollographql/apollo-server/issues/4472
 
 1. Run `npm install`
 2. Run `npm run start`
-3. Run this cURL command to send 10 GraphQL requests to your local instance that should trigger the `"willResolveField called after willSendResponse` error:
-```shell
-curl -s -o /dev/null 'http://localhost:4000/?iteration=[1-10]' \
-  -H 'content-type: application/json' \
-  --data-raw '{"query":"query Foo {\n  one: foo {\n      bar1\n      bar2\n  }\n\n  two: foo {\n      bar1\n      bar2\n  }\n}\n","variables":{},"operationName":"Foo"}'
-```
+3. Run `./curl.sh`
 
 You should see the following error logged by `orphanedRequestPlugin.js` in your server logs:
 
