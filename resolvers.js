@@ -1,34 +1,43 @@
-async function generateFieldValue() {
-    const value = Math.floor(Math.random() * 100);
-    // flip a coin to decide whether we resolve with a string or reject with an error
-    if (value < 50) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve("bar async");
-            }, Math.random() * 1000);
-        });
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function generateFieldValueFn(fieldName, seed) {
+  console.log(`field=${fieldName} seed=${seed}`);
+  return async () => {
+    const mode = Number(seed % 100n);
+    const delayMs = (Number(seed % 100n) / 100) * 100;
+    if (mode < 45) {
+      return "bar sync";
+    } else if (mode < 90) {
+      await delay(delayMs);
+      return "bar async";
+    } else if (mode < 93) {
+      throw new Error("error sync");
+    } else if (mode < 96) {
+      await delay(delayMs);
+      throw new Error("error async");
     } else {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject(new Error("error async"));
-            }, Math.random() * 1000);
-        });
+      return null;
     }
+  };
 }
 
 const resolvers = {
-    Query: {
-        async foo() {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve({
-                        bar1: generateFieldValue,
-                        bar2: generateFieldValue,
-                    });
-                }, Math.random() * 1000);
-            });
-        },
+  Query: {
+    async foo() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            bar1: generateFieldValueFn("bar1", process.hrtime.bigint()),
+            bar2: generateFieldValueFn("bar2", process.hrtime.bigint()),
+            bar3: generateFieldValueFn("bar3", process.hrtime.bigint()),
+            bar4: generateFieldValueFn("bar4", process.hrtime.bigint()),
+          });
+        }, Math.random() * 1000);
+      });
     },
+  },
 };
 
 module.exports = resolvers;
