@@ -18,6 +18,15 @@ const server = new ApolloServer({
   plugins: [ApolloServerPluginOrphanedRequestLogger()],
 });
 
+process.on("unhandledRejection", (reason) => {
+  console.log({
+    msg: "unhandledRejection",
+    reason: reason?.toString(),
+    stack: reason instanceof Error ? reason.stack : undefined,
+  });
+  process.exit(1);
+});
+
 // The `listen` method launches a web server.
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
