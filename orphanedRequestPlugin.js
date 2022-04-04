@@ -8,10 +8,11 @@ function ApolloServerPluginOrphanedRequestLogger() {
           return {
             willResolveField() {
               if (responseSent) {
-                console.log({
-                  msg: "willResolveField called after willSendResponse",
-                  stack: new Error().stack,
-                });
+                const err = new Error(
+                  "willResolveField called after willSendResponse"
+                );
+                console.log(err);
+                throw err;
               }
             },
           };
