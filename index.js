@@ -6,9 +6,21 @@ const resolvers = require("./resolvers");
 
 const typeDefs = gql`
   type Query {
-    errorSoon: String!
-    nestedObjectSoon: Query!
-    justAString: String!
+    syncNullError: String!
+    asyncNullError: String!
+    
+    syncString: String!
+    asyncString: String!
+    
+    nested: Nested!
+  }
+  
+  type Nested {
+    syncNullError: String!
+    asyncNullError: String!
+    
+    syncString: String!
+    asyncString: String!
   }
 `;
 

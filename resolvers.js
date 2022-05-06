@@ -2,23 +2,39 @@ async function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function syncNullError() {
+    return null;
+}
+
+async function asyncNullError() {
+    await delay(1000);
+    return null;
+}
+
+function syncString() {
+    return 'foo'
+}
+
+async function asyncString() {
+    await delay(1000);
+    return 'foo'
+}
+
 const resolvers = {
     Query: {
-        async errorSoon() {
-            console.log("errorSoon: top");
-            await delay(20);
-            console.log("errorSoon: delayed, gonna throw");
-            throw new Error("error");
-        },
-        async nestedObjectSoon() {
-            console.log("nestedObjectSoon: top");
-            await delay(100);
-            console.log("nestedObjectSoon: now returning");
-            return {};
-        },
-        justAString() {
-            console.log("justAString");
-            return "hi";
+        syncNullError,
+        asyncNullError,
+        syncString,
+        asyncString,
+
+        async nested() {
+            await delay(1000);
+            return {
+                syncNullError,
+                asyncNullError,
+                syncString,
+                asyncString,
+            }
         }
     }
 };
